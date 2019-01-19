@@ -33,14 +33,6 @@ export default class App extends React.Component {
   render() {
     
     return (
-      // <NavigatorIOS
-      //   initialRoute={{
-      //     component: Menu,
-      //     title: 'Menu',
-      //     passProps: {index: 1},
-      //   }}
-      //   style={{flex: 1}}
-      // /> 
       <AppContainer/>
     );
   }
