@@ -51,7 +51,7 @@ class MenuScene extends React.Component {
         let nextIndex = ++this.props.index;
         this.props.navigator.push({
             component: MenuDetails,
-            title: 'MenuDetails',
+            title: 'Menu Details',
             passProps: { index: nextIndex, item: item }
         });
     }
@@ -79,10 +79,6 @@ class MenuScene extends React.Component {
                     }
                     }
                 />
-                {/* <TabBarIOS>
-                    <TabBarIOS.Item title="Menu" onPress={() => this.props.navigator.popToTop({ component: Menu, title: 'Menu' })} />
-                    <TabBarIOS.Item title="Today's Menu" onPress={() => this.props.navigator.push({ component: TodaysMenu, title: 'Today\'s Menu' })} />
-                </TabBarIOS> */}
             </View>
         );
     }
