@@ -4,8 +4,7 @@ import Menu from './Menu.js';
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        paddingTop: 10
+        flex: 1
     },
     item: {
         padding: 10,

@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { AppRegistry, FlatList, StyleSheet, Text, View, AlertIOS, TabBarIOS, NavigatorIOS } from 'react-native';
+import { ActivityIndicator, AppRegistry, FlatList, StyleSheet, Text, View, AlertIOS, TabBarIOS, NavigatorIOS } from 'react-native';
 import MenuDetails from './MenuDetails.js';
 import TodaysMenu from './TodaysMenu.js';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: 10
+        paddingTop: 60
     },
     item: {
         padding: 10,
@@ -17,16 +17,16 @@ const styles = StyleSheet.create({
 });
 
 export default class Menu extends React.Component {
-    render(){
+    render() {
         return (
-      <NavigatorIOS
-        initialRoute={{
-          component: MenuScene,
-          title: 'Menu',
-          passProps: {index: 1},
-        }}
-        style={{flex: 1}}
-      /> 
+            <NavigatorIOS
+                initialRoute={{
+                    component: MenuScene,
+                    title: 'Menu',
+                    passProps: { index: 1 },
+                }}
+                style={{ flex: 1 }}
+            />
         );
     }
 }
@@ -42,9 +42,25 @@ class MenuScene extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            selectedTab: 'Menu'
+            selectedTab: 'Menu',
+            isLoading: true,
+            dataSource: []
         }
         this._onForward = this._onForward.bind(this);
+    }
+
+    componentDidMount() {
+        return fetch('http://192.168.1.7:8184/api/getAllMenu')
+            .then((response) => response.json())
+            .then((responseJson) => {
+                    this.setState({
+                        isLoading: false,
+                        dataSource: responseJson,
+                    });
+            })
+            .catch((error) => {
+                console.error(error);
+            });
     }
 
     _onForward(item) {
@@ -57,27 +73,30 @@ class MenuScene extends React.Component {
     }
 
     render() {
+        if (this.state.isLoading) {
+            return (
+                <View style={{ flex: 1, padding: 20 }}>
+                    <ActivityIndicator />
+                </View>
+            )
+        }
+
         return (
             <View style={styles.container}>
-                
+
                 <FlatList
-                    data={[
-                        { key: '된장찌개' },
-                        { key: '부대찌개' },
-                        { key: '콩나물불고기' },
-                        { key: 'Steak' },
-                        { key: '떡볶이' },
-                        { key: '오뎅국' },
-                        { key: '카레' }
-                    ]}
+                    data={
+                        this.state.dataSource
+                    }
                     renderItem={({ item }) => {
                         return (
-                            <Text button onPress={() => { this._onForward(item.key); }} style={styles.item}>
-                                {item.key}
+                            <Text button onPress={() => { this._onForward(item.name); }} style={styles.item}>
+                                {item.name}
                             </Text>
                         )
                     }
                     }
+                    keyExtractor={(item, index) => index.toString()}
                 />
             </View>
         );
